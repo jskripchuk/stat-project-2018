@@ -63,10 +63,12 @@ if(CSK == 'C')
       
       if(test3$p.value < .05)
       {
+        print("We are testing the difference of means with a pooled two sample t-test")
         print(paste("We reject the null since the p value is ",test3$p.value))
       }
       else
       {
+        print("We are testing the difference of means with a pooled two sample t-test")
         print(paste("We fail to reject the null since the p value is ",test3$p.value))
       }
       
@@ -80,10 +82,12 @@ if(CSK == 'C')
       
       if(test3$p.value < .05)
       {
+        print("We are testing the difference of means with a two sample t-test")
         print(paste("We reject the null since the p value is ",test3$p.value))
       }
       else
       {
+        print("We are testing the difference of means with a two sample t-test")
         print(paste("We fail to reject the null since the p value is ",test3$p.value))
       }
     }
