@@ -9,7 +9,90 @@ CSK<-as.character(x[1,3])
 DI<-as.character(x[2,3])
 x1y1<-c(x1,y1)
 
-if(CSK=="K"){
+
+if(CSK == 'C')
+{
+  if(DI == 'I')
+  {
+    #size greater than 40
+    if(n1 <= 40 || n2 <= 40)
+    {
+      test1<-shapiro.test(x1)
+      test2<-shapiro.test(y1)
+      
+      #is normal?
+      if(test1$p.value <= .05 || test2$p.value <= .05)
+      {
+        print("test failed because data are not normal")
+        exit()
+      }
+      
+      Q1x<-quantile(x1,.25, type = 6)
+      Q3x<-quantile(x1,.75, type = 6)
+      lowerOutlierx<-(Q1x - (1.5*IQR(x1, type=6)))
+      upperOutlierx<-(Q3x + (1.5*IQR(x1, type=6)))
+      LXoutliers<-x1<lowerOutlierx
+      UXoutliers<-x1>upperOutlierx
+      
+      Q1y<-quantile(y1,.25, type = 6)
+      Q3y<-quantile(y1,.75, type = 6)
+      lowerOutliery<-(Q1y - (1.5*IQR(y1, type=6)))
+      upperOutliery<-(Q3y + (1.5*IQR(y1, type=6)))
+      LYoutliers<-y1<lowerOutliery
+      UYoutliers<-y1>upperOutliery
+      
+      #outliers?
+      if(LXoutliers == TRUE || UXoutliers == TRUE || LYoutliers == TRUE || UYoutliers == TRUE)
+      {
+        print("test failed because outliers exist")
+        exit()
+      }
+    }
+    
+    #checks stdev ratio
+    large<-max(sd(x1),sd(y1))
+    small<-min(sd(x1),sd(y1))
+    check<-large/small
+    
+    if(check > 2)
+    {
+      #pooled
+      test3<-t.test(x1, y1,
+                    alternative = c("two.sided"), paired = FALSE, var.equal = TRUE,
+                    conf.level = 0.95)
+      
+      if(test3$p.value < .05)
+      {
+        print(paste("We reject the null since the p value is ",test3$p.value))
+      }
+      else
+      {
+        print(paste("We fail to reject the null since the p value is ",test3$p.value))
+      }
+      
+    }
+    else
+    {
+      #t test
+      test3<-t.test(x1, y1,
+                    alternative = c("two.sided"), paired = FALSE, var.equal = FALSE,
+                    conf.level = 0.95)
+      
+      if(test3$p.value < .05)
+      {
+        print(paste("We reject the null since the p value is ",test3$p.value))
+      }
+      else
+      {
+        print(paste("We fail to reject the null since the p value is ",test3$p.value))
+      }
+    }
+  }
+  else if(DI == 'D')
+  {
+    
+  }
+}else if(CSK=="K"){
   print("Data given is proportional data of successes and failures, performing two-sided Z-test of equal proportions at a 0.05 significance level")
   s1<-sum(x1==1)
   f1<-sum(x1==0)
