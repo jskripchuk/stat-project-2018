@@ -1,4 +1,4 @@
-x<-read.csv(file=file.choose(),sep=",")
+x<-read.csv(file="C:\\Users\\H\\Desktop\\testcase8.csv")
 x1<-x[,1]
 y1<-x[,2]
 x1<-x1[!is.na(x1)]
@@ -118,7 +118,7 @@ if(CSK == 'C')
       
       #performs binom test
       len<-length(signs)
-      sign<-binom.test(pos, len, alternative = c("two.sided"), conf.level = 0.95)
+      sign<-binom.test(length(pos), len, alternative = c("two.sided"), conf.level = 0.95)
       
       if(sign$p.value < .05)
       {
