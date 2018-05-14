@@ -94,6 +94,63 @@ if(CSK == 'C')
   }
   else if(DI == 'D')
   {
+    z<-x1-y1
+    testd<-shapiro.test(z)
+    if(testd$p.value <= .05)
+    {
+      #not normal
+      signs<-c()
+      pos<-c()
+      z<-x1-y1
+      for (i in 1:length(z)) 
+        { 
+        #counts successes/positive values
+        if(z[i] > 0)
+        {
+          pos<-c(pos,z[i])
+        }
+        #counts none 0 differences
+        if(z[i] > 0 || z[i] < 0)
+        {
+          signs<-c(signs,z[i])
+        }
+      }
+      
+      #performs binom test
+      len<-length(signs)
+      sign<-binom.test(pos, len, alternative = c("two.sided"), conf.level = 0.95)
+      
+      if(sign$p.value < .05)
+      {
+        print("We are testing the difference of medians with a sign test")
+        print(paste("We reject the null since the p value is ",sign$p.value))
+      }
+      else
+      {
+        print("We are testing the difference of medians with a sign test")
+        print(paste("We fail to reject the null since the p value is ",sign$p.value))
+      }
+      
+    }
+    else
+    {
+      #normal
+      match<-t.test(x1, y1,
+                    alternative = c("two.sided"), paired = TRUE, var.equal = FALSE,
+                    conf.level = 0.95)
+      
+      if(match$p.value < .05)
+      {
+        print("We are testing the difference of paired means with a a matched pairs two sample t-test")
+        print(paste("We reject the null since the p value is ",match$p.value))
+      }
+      else
+      {
+        print("We are testing the difference of paired means with a a matched pairs two sample t-test")
+        print(paste("We fail to reject the null since the p value is ",match$p.value))
+      }
+      
+    }
     
   }
 }else if(CSK=="K"){
